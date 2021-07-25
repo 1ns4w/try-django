@@ -1,1 +1,1 @@
-"# try-django" 
+# try-django
