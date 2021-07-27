@@ -4,13 +4,43 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from .models import Feature
 
-# Views functions
+# Here goes business logic
 
 # Create your views here.
 
 def index(request):
     features = Feature.objects.all()
     return render(request, 'index.html', {'features': features})
+
+def login(request):
+
+    if request.method == 'POST':
+
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        
+        elif username == '' or password == '':
+            messages.error(request, 'Please enter all the fields')
+            return redirect('login')
+
+        else:
+            messages.error(request, 'Invalid credentials')
+            return redirect('login')
+        
+    else:
+        return render(request, 'login.html')
+
+
+    return render(request, 'login.html')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
 
 def register(request):
 
@@ -48,8 +78,3 @@ def register(request):
    
     else:
         return render(request, 'register.html')
-
-def counter(request):
-    text = request.POST['text']
-    amount_of_words = len(text.split())
-    return render(request, 'counter.html', {'amount': amount_of_words})
