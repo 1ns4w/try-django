@@ -78,3 +78,10 @@ def register(request):
    
     else:
         return render(request, 'register.html')
+
+def counter(request):
+    posts = [1, 2, 3, 4, 5]
+    return render(request, 'counter.html', {'posts': posts})
+
+def post(request, pk):
+    return render(request, 'post.html', {'pk': pk})
